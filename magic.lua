@@ -11,7 +11,7 @@ local pattern = require("pattern")
 local myrobot = {}
 
 -- You can change this --
-local layout = {}
+layout = {}
 
 local dropSlot = 1                  -- the slot where the drop item is
 local dropCount = 1                 -- how many items should be dropped
