@@ -17,9 +17,9 @@ _M.giant = {
   {1,1,1,
    1,2,1,
    1,1,1}
-   }
+   },
    
-   time = 50
+   time = 50,
    dropSlot = 5
   }
 
@@ -39,7 +39,7 @@ _M.normal = {
    1,1,1}
    }
    
-   time = 25
+   time = 25,
    dropSlot = 5
   }
   
