@@ -10,8 +10,6 @@ local pattern = require("pattern")
 
 local myrobot = {}
 
-function myrobot.setconfig(a)
-
 -- You can change this --
 local layout = {}
 
@@ -22,6 +20,7 @@ local waitTime = 7.5                -- time between creations
 local beeps = true                  -- turn off the beeps
 
 -- Do not change after this --
+dimensions = #layout
 
 local function randomBeep()
     if beeps then
@@ -67,7 +66,7 @@ local function getNrItems()
     return #itemCounts, itemCounts
 end
 
-local nrItems, itemCounts = getNrItems()
+
 
 local function placeDown(slot)
     if slot == 0 then
@@ -147,20 +146,19 @@ function loadNormal()
   end
   
 function configurate(patternName)
-  if patternName = "giant" then
+  if patternName == "giant" then
     loadGiant()
     end
-  if patternName = "normal" then
+  if patternName == "normal" then
     loadNormal()
     end
   end
 
-function main(a)
+function main()
     randomBeep()
-configurate(a)
   dimensions = #layout
   inventorySize = robot.inventorySize()
-
+  nrItems, itemCounts = getNrItems()
         -- get the items
         robot.back()
         getItems()
@@ -190,8 +188,34 @@ configurate(a)
     os.sleep(waitTime)
 end
 
+function printLayout()
+    table1 = layout[1]
+    print(table1[1]..","..table1[2]..","..table1[3])
+    print(table1[4]..","..table1[5]..","..table1[6])
+    print(table1[7]..","..table1[8]..","..table1[9])
+    
+    print(" ")
+    
+    table2 = layout[2]
+    print(table2[1]..","..table2[2]..","..table2[3])
+    print(table2[4]..","..table2[5]..","..table2[6])
+    print(table2[7]..","..table2[8]..","..table2[9])
+    
+    print(" ")
+    
+    table3 = layout[3]
+    print(table3[1]..","..table3[2]..","..table3[3])
+    print(table3[4]..","..table3[5]..","..table3[6])
+    print(table3[7]..","..table3[8]..","..table3[9])
+    
+end
+
 function myrobot.activate(a)
-  main()
+  configurate(a)
+  print(waitTime.. " waitTime")
+  print(dropSlot.. " dropSlot")
+  printLayout()
+ -- main()
 end
 
 return myrobot
