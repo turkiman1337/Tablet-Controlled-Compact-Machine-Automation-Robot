@@ -43,3 +43,4 @@ _M.normal = {
    dropSlot = 5
   }
   
+return _M
