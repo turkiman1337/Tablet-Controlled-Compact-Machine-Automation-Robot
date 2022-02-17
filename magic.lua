@@ -10,7 +10,7 @@ local pattern = require("pattern")
 
 local myrobot = {}
 
-fucntion myrobot.setconfig(a)
+function myrobot.setconfig(a)
 
 -- You can change this --
 local layout = {}
