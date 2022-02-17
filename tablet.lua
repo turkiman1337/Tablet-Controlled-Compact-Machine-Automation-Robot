@@ -14,13 +14,13 @@ local version = "v1.0"
 -- Begin: Callbacks
 local function button_0_callback(guiID, buttonID)
    if(status=="complete" or status=="ready") then
-    tunnel.send("giant.cfg")
+    tunnel.send("giant")
 end
 end
  
 local function button_1_callback(guiID, buttonID)
 if(status=="complete" or status=="ready") then
-    tunnel.send("normal.cfg")
+    tunnel.send("normal")
 end
 end
  
