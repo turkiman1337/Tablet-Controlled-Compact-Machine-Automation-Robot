@@ -11,7 +11,7 @@ local pattern = require("pattern")
 local myrobot = {}
 
 -- You can change this --
-layout = {}
+local layout = {}
 
 local dropSlot = 1                  -- the slot where the drop item is
 local dropCount = 1                 -- how many items should be dropped
@@ -152,12 +152,11 @@ function configurate(patternName)
   if patternName == "normal" then
     loadNormal()
     end
-    dimensions = #layout
-    nrItems, itemCounts = getNrItems()
   end
 
 function main()
     randomBeep()
+  dimensions = #layout
   inventorySize = robot.inventorySize()
   nrItems, itemCounts = getNrItems()
         -- get the items
@@ -216,7 +215,7 @@ function myrobot.activate(a)
   print(waitTime.. " waitTime")
   print(dropSlot.. " dropSlot")
   printLayout()
-  main()
+ -- main()
 end
 
 return myrobot
