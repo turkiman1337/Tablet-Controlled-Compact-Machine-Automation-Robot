@@ -7,8 +7,12 @@ local computer = component.computer
 local sides = require("sides")
 local look_vars = false
 local pattern = require("pattern")
+local inv = component.inventory_controller
+local modem = component.modem
 
 local myrobot = {}
+
+
 
 -- You can change this --
 local layout = {}
@@ -18,6 +22,8 @@ local dropCount = 1                 -- how many items should be dropped
 
 local waitTime = 7.5                -- time between creations
 local beeps = true                  -- turn off the beeps
+
+local nrItems = 5                         -- number of items in the interface
 
 -- Do not change after this --
 dimensions = #layout
@@ -40,31 +46,22 @@ local function walk(steps)
     end
 end
 
-
-
-local function getNrItems()
-    local itemCounts = {}
-    for z = 1, dimensions do
-        for i = 1, #layout[z] do
-            local itemNr = layout[z][i]
-            if itemNr ~= 0 then
-                local ic = itemCounts[itemNr]
-                if ic ~= nil then
-                    itemCounts[itemNr] = ic+1
-                else
-                    itemCounts[itemNr] = 1
-                end
-            end
-        end
-    end
-    local ic = itemCounts[dropSlot]
-    if ic ~= nil then
-        itemCounts[dropSlot] = ic+dropCount
-    else
-        itemCounts[dropSlot] = dropCount
-    end
-    return #itemCounts, itemCounts
+local function getItemCounts()
+	local itemCounts = {}
+	for q = 1, nrItems do itemCounts[q] = 0 end
+	for z = 1, dimensions do
+		for i = 1, #layout[z] do 
+	local nr = layout[z][i]
+	if nr ~= 0 then
+	itemCounts[nr] = itemCounts[nr] + 1
+		end
+	end
 end
+
+itemCounts[dropSlot] = itemCounts[dropSlot] + dropCount
+
+return itemCounts
+end 
 
 
 
@@ -119,16 +116,16 @@ end
 
 local function getItems()
     local stackSize = 64
-    for i = 1, nrItems do
         robot.turnRight()
         robot.forward()
         robot.turnLeft()
+    for i = 1, nrItems do
         robot.select(i)
         randomBeep()
-        robot.suck(itemCounts[i])
+        inv.suckFromSlot(sides.front,i+9, itemCounts[i])
         if itemCounts[i] > stackSize then
             robot.select(nrItems+i)
-            robot.suck(itemCounts[i]-stackSize)
+            inv.suckFromSlot(sides.front,nrItems+i+9, itemCounts[i]-stackSize)
         end
     end
 end
@@ -158,15 +155,17 @@ function main()
     randomBeep()
   dimensions = #layout
   inventorySize = robot.inventorySize()
-  nrItems, itemCounts = getNrItems()
+  itemCounts = getItemCounts()
         -- get the items
         robot.back()
+        modem.broadcast(69, "Get Items")
         getItems()
         -- go to start position
         robot.turnRight()
-        walk(dimensions+1-nrItems)
+        walk(dimensions)
         robot.turnLeft()
         -- build
+        modem.broadcast(69, "Building")
         buildLayers()
         -- go to item throw position
         robot.turnRight()
@@ -185,7 +184,9 @@ function main()
         robot.select(inventorySize)
         robot.dropUp()
         randomBeep()
+        modem.broadcast(69, "Waiting")
     os.sleep(waitTime)
+        modem.broadcast(69, "Ready")
 end
 
 function printLayout()
@@ -215,7 +216,7 @@ function myrobot.activate(a)
   print(waitTime.. " waitTime")
   print(dropSlot.. " dropSlot")
   printLayout()
- -- main()
+  main()
 end
 
 return myrobot
